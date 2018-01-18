@@ -24,6 +24,7 @@ Example Playbook
 
 ```yml
 - hosts: all
+  become: yes
   roles:
     - { role: djx339.k8s-kubeadm-master }
 ```
