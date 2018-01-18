@@ -1,2 +1,55 @@
 ---
-# tasks file for k8s-kubeadm-master
+- name: init k8s master
+  shell: kubeadm init
+  args:
+    creates: /tmp/kube_init_completed
+  register: kube_init
+
+- name: print init output
+  debug:
+    msg: "kubeadm init output: {{ kube_init.stdout }} /n rc:  {{ kube_init.rc }}"
+  when: kube_init.changed
+
+- name: set join command fact
+  set_fact:
+    k8s_join_cmd: "{{ kube_init.stdout.splitlines()[-1] }}"
+  when: kube_init.changed
+
+- name: print join
+  debug:
+    msg: "join command: {{ k8s_join_cmd }}"
+  when: kube_init.changed
+
+- name: save join command
+  lineinfile:
+    dest: /etc/kubernetes/join_command.sh
+    create: yes
+    mode: 0600
+    owner: root
+    group: root
+    regexp: "kubeadm join"
+    line: "{{ k8s_join_cmd }}"
+    state: present
+  when: kube_init.changed
+
+- name: read join command
+  shell: cat /etc/kubernetes/join_command.sh
+  register: join_cat
+
+- name: set join command fact
+  set_fact:
+    k8s_join_cmd: "{{ join_cat.stdout }}"
+  when: not kube_init.changed
+
+- name: record successful initialization
+  file:
+    path: /tmp/kube_init_completed
+    state: touch
+  when: kube_init.rc == 0
+
+- name: install romana network
+  shell: "kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f {{ k8s_network_conf_file }}"
+
+- name: master as node
+  shell: kubectl --kubeconfig=/etc/kubernetes/admin.conf taint nodes --all node-role.kubernetes.io/master-
+  ignore_errors: True

@@ -1,2 +1,2 @@
 ---
-# defaults file for k8s-kubeadm-master
+k8s_network_conf_file: https://raw.githubusercontent.com/romana/romana/master/containerize/specs/romana-kubeadm.yml
