@@ -53,3 +53,4 @@
 - name: master as node
   shell: kubectl --kubeconfig=/etc/kubernetes/admin.conf taint nodes --all node-role.kubernetes.io/master-
   ignore_errors: True
+  when: k8s_master_as_node
