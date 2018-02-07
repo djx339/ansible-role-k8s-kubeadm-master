@@ -47,7 +47,7 @@
     state: touch
   when: kube_init.rc == 0
 
-- name: install romana network
+- name: install network
   shell: "kubectl --kubeconfig=/etc/kubernetes/admin.conf apply -f {{ k8s_network_conf_file }}"
 
 - name: master as node
