@@ -1,2 +1,3 @@
 ---
 k8s_network_conf_file: https://raw.githubusercontent.com/romana/romana/master/containerize/specs/romana-kubeadm.yml
+k8s_kubeadm_init_args:
