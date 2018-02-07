@@ -14,6 +14,10 @@ Role Variables
 `k8s_network_conf_file`: The kubernetes network config file.
 Default: https://raw.githubusercontent.com/romana/romana/master/containerize/specs/romana-kubeadm.yml
 
+`k8s_kubeadm_init_args`: The arguments for `kubeadm init`. Default is empty
+
+`k8s_master_as_node`: If schedule pods on master. Default: `True`
+
 Dependencies
 ------------
 
