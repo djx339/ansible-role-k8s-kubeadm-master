@@ -1,6 +1,6 @@
 ---
 - name: init k8s master
-  shell: kubeadm init
+  shell: "kubeadm init {{ k8s_kubeadm_init_args }}"
   args:
     creates: /tmp/kube_init_completed
   register: kube_init
